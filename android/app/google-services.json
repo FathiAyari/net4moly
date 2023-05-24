@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "249889841542",
+    "project_id": "net4moly-397e5",
+    "storage_bucket": "net4moly-397e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:249889841542:android:b7fca96f538abb59fc0c07",
+        "android_client_info": {
+          "package_name": "com.example.net4moly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "249889841542-34o7olec5b80e1rjq7kgqp1ftjvfvuss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj-lvCHgE-nsn6F8Vjyt4H-PkIh0a6NZk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "249889841542-34o7olec5b80e1rjq7kgqp1ftjvfvuss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
