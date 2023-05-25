@@ -80,18 +80,21 @@ class AuthServices {
   logOut(BuildContext context) {
     storage.remove('role');
     storage.remove('user');
-    Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil('/signin', (Route<dynamic> route) => false);
   }
 
   Future<String> changeEmail(String email, String password) async {
     var userFromStorage = GetStorage().read('user');
+    print(email);
+    print(userFromStorage['email']);
     try {
       await auth.signInWithEmailAndPassword(email: userFromStorage['email'], password: password);
       await user!.updateEmail(email);
-      await userCollection.doc(userFromStorage['uid']).update({'email': email});
+      await userCollection.doc(userFromStorage['id']).update({'email': email});
 
       userFromStorage['email'] = email;
       await GetStorage().write('user', userFromStorage);
+
       return 'done';
     } on FirebaseAuthException catch (e) {
       print(e.code);

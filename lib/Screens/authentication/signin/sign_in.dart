@@ -260,7 +260,7 @@ class _SigninState extends State<Signin> {
                                     });
                                     AuthServices().getUserData().then((value) {
                                       AuthServices().saveUserLocally(value);
-                                      if (value.role == 'client') {
+                                      if (value.role == 'user') {
                                         Navigator.pushNamed(context, "/user");
                                       } else {
                                         Get.toNamed("/admin");

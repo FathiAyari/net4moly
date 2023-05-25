@@ -2,8 +2,8 @@ class AppUser {
   String? id;
   String name;
   String last_name;
-  String birth_date;
-  String phone_number;
+  String? birth_date;
+  String? phone_number;
   String email;
   String? password;
   String role;
@@ -14,8 +14,8 @@ class AppUser {
     required this.name,
     required this.profile,
     required this.last_name,
-    required this.birth_date,
-    required this.phone_number,
+    this.birth_date,
+    this.phone_number,
     required this.email,
     this.password,
     required this.role,

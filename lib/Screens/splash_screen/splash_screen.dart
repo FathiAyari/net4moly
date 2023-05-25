@@ -14,18 +14,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  var auth = GetStorage().read("auth");
+  var role = GetStorage().read("role");
   var user = GetStorage().read("user");
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     var timer = Timer(Duration(seconds: 3), () {
-      if (auth == 1) {
-        if (user['role'] == "admin") {
-          Get.toNamed("/admin");
-        } else {
+      if (role != null) {
+        if (role == 'user') {
           Get.toNamed("/user");
+        } else {
+          Get.toNamed("/admin");
         }
       } else {
         Get.toNamed("/signin");
