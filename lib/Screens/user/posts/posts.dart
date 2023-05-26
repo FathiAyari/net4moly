@@ -47,20 +47,25 @@ class _PostsState extends State<Posts> {
             child: Icon(Icons.post_add),
             label: 'Publication',
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddPost()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => AddPost()));
             },
           ),
           SpeedDialChild(
             child: Icon(Icons.book),
             label: 'Cours',
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddCours()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => AddCours()));
             },
           ),
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("posts").orderBy("creationDate", descending: true).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection("posts")
+            .orderBy("creationDate", descending: true)
+            .snapshots(),
         builder: (context, postsSnapshots) {
           if (postsSnapshots.hasData) {
             if (postsSnapshots.data!.size != 0) {
@@ -77,61 +82,85 @@ class _PostsState extends State<Posts> {
                       var listOfData = postsSnapshots.data!.docs.toList();
 
                       for (var center in listOfData) {
-                        postslists.add(Post.fromJson(center.data() as Map<String, dynamic>));
+                        postslists.add(Post.fromJson(
+                            center.data() as Map<String, dynamic>));
                       }
                       return Padding(
                         padding: const EdgeInsets.all(8),
                         child: Container(
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20)),
                           width: double.infinity,
                           child: Column(
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: StreamBuilder(
-                                  stream: FirebaseFirestore.instance.collection("users").doc(postslists[index].owner).snapshots(),
-                                  builder:
-                                      (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+                                  stream: FirebaseFirestore.instance
+                                      .collection("users")
+                                      .doc(postslists[index].owner)
+                                      .snapshots(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<
+                                              DocumentSnapshot<
+                                                  Map<String, dynamic>>>
+                                          snapshot) {
                                     if (snapshot.hasData) {
                                       return InkWell(
                                         onTap: () {
-                                          if (user['id'] != snapshot.data!.get("id")) {
+                                          if (user['id'] !=
+                                              snapshot.data!.get("id")) {
                                             Get.to(Messenger(
                                               user: AppUser(
-                                                  name: snapshot.data!.get("name"),
+                                                  name: snapshot.data!
+                                                      .get("name"),
                                                   id: snapshot.data!.get("id"),
-                                                  profile: snapshot.data!.get("profile"),
-                                                  last_name: snapshot.data!.get("profile"),
-                                                  email: snapshot.data!.get("email"),
-                                                  role: snapshot.data!.get("role")),
+                                                  profile: snapshot.data!
+                                                      .get("profile"),
+                                                  last_name: snapshot.data!
+                                                      .get("profile"),
+                                                  email: snapshot.data!
+                                                      .get("email"),
+                                                  role: snapshot.data!
+                                                      .get("role")),
                                             ));
                                           }
                                         },
                                         child: Row(
                                           children: [
                                             CircleAvatar(
-                                              radius: Constants.screenHeight * 0.033,
+                                              radius: Constants.screenHeight *
+                                                  0.033,
                                               backgroundColor: Colors.green,
                                               child: CircleAvatar(
-                                                backgroundImage: NetworkImage("${snapshot.data!.get("profile")}"),
-                                                radius: Constants.screenHeight * 0.030,
+                                                backgroundImage: NetworkImage(
+                                                    "${snapshot.data!.get("profile")}"),
+                                                radius: Constants.screenHeight *
+                                                    0.030,
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Text("${snapshot.data!.get("name")} ${snapshot.data!.get("last_name")}"),
+                                                  Text(
+                                                      "${snapshot.data!.get("name")} ${snapshot.data!.get("last_name")}"),
                                                   Row(
                                                     children: [
                                                       Text(
                                                           "${DateFormat("yyyy-MM-dd hh:mm").format(postslists[index].creationDate)}"),
                                                       Icon(
                                                         Icons.access_time_sharp,
-                                                        size: Constants.screenHeight * 0.02,
-                                                        color: Colors.blueAccent,
+                                                        size: Constants
+                                                                .screenHeight *
+                                                            0.02,
+                                                        color:
+                                                            Colors.blueAccent,
                                                       )
                                                     ],
                                                   ),
@@ -144,28 +173,38 @@ class _PostsState extends State<Posts> {
                                                   // Show the dialog
                                                   showDialog(
                                                     context: context,
-                                                    builder: (BuildContext context) {
+                                                    builder:
+                                                        (BuildContext context) {
                                                       return AlertDialog(
                                                         title: Text("Signaler"),
-                                                        content: Text("êtes-vous sûr de vouloir signaler cet élément?"),
+                                                        content: Text(
+                                                            "êtes-vous sûr de vouloir signaler cet élément?"),
                                                         actions: [
                                                           // Define the actions that the user can take
                                                           TextButton(
-                                                            child: Text("Annuler"),
+                                                            child:
+                                                                Text("Annuler"),
                                                             onPressed: () {
                                                               // Close the dialog
-                                                              Navigator.of(context).pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
                                                             },
                                                           ),
                                                           TextButton(
                                                             child: Text("Oui"),
-                                                            onPressed: () async {
-                                                              Navigator.of(context).pop();
+                                                            onPressed:
+                                                                () async {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
                                                               Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
-                                                                      builder: (context) => ReportPost(
-                                                                            postId: postsSnapshots.data!.docs[index].id,
+                                                                      builder: (context) =>
+                                                                          ReportPost(
+                                                                            postId:
+                                                                                postsSnapshots.data!.docs[index].id,
                                                                           )));
                                                             },
                                                           ),
@@ -194,15 +233,18 @@ class _PostsState extends State<Posts> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               ReadMoreText(
                                                 '${postslists[index].description}',
                                                 trimLines: 2,
-                                                style: TextStyle(color: Colors.black),
+                                                style: TextStyle(
+                                                    color: Colors.black),
                                                 colorClickableText: Colors.pink,
                                                 trimMode: TrimMode.Line,
-                                                trimCollapsedText: '...voir plus',
+                                                trimCollapsedText:
+                                                    '...voir plus',
                                                 trimExpandedText: ' reduire ',
                                               ),
                                             ],
@@ -218,7 +260,8 @@ class _PostsState extends State<Posts> {
                                         padding: const EdgeInsets.all(8),
                                         child: Container(
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(20),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
                                             child: Image.network(
                                               "${postslists[index].image}",
                                               fit: BoxFit.cover,
@@ -234,65 +277,92 @@ class _PostsState extends State<Posts> {
                                 children: [
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
                                       child: OutlinedButton.icon(
                                           style: ElevatedButton.styleFrom(
                                             side: BorderSide(
                                               width: 2.0,
-                                              color: postslists[index].likes.contains(user['id']) ? Colors.red : Colors.grey,
+                                              color: postslists[index]
+                                                      .likes
+                                                      .contains(user['id'])
+                                                  ? Colors.red
+                                                  : Colors.grey,
                                             ),
                                             primary: Colors.white,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
                                             ),
                                           ),
                                           onPressed: () {
-                                            List oldData = postslists[index].likes;
+                                            List oldData =
+                                                postslists[index].likes;
                                             if (oldData.contains(user['id'])) {
                                               oldData.remove(user['id']);
                                             } else {
                                               oldData.add(user['id']);
                                             }
-                                            postsSnapshots.data!.docs[index].reference.update({'likes': oldData});
+                                            postsSnapshots
+                                                .data!.docs[index].reference
+                                                .update({'likes': oldData});
                                           },
                                           icon: Icon(
                                             Icons.favorite,
-                                            color: postslists[index].likes.contains(user['id']) ? Colors.red : Colors.grey,
+                                            color: postslists[index]
+                                                    .likes
+                                                    .contains(user['id'])
+                                                ? Colors.red
+                                                : Colors.grey,
                                           ),
                                           label: Text(
                                             '${postslists[index].likes.length}',
                                             style: TextStyle(
-                                              color: postslists[index].likes.contains(user['id']) ? Colors.red : Colors.grey,
+                                              color: postslists[index]
+                                                      .likes
+                                                      .contains(user['id'])
+                                                  ? Colors.red
+                                                  : Colors.grey,
                                             ),
                                           )),
                                     ),
                                   ),
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
                                       child: OutlinedButton.icon(
                                         style: ElevatedButton.styleFrom(
-                                          side: BorderSide(width: 2.0, color: Colors.indigo),
+                                          side: BorderSide(
+                                              width: 2.0, color: Colors.indigo),
                                           primary: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                         ),
                                         onPressed: () {
-                                          Get.to(Comments(postId: postsSnapshots.data!.docs[index].id));
+                                          Get.to(Comments(
+                                              postId: postsSnapshots
+                                                  .data!.docs[index].id));
                                         },
-                                        icon: Icon(Icons.comment, color: Colors.indigo),
+                                        icon: Icon(Icons.comment,
+                                            color: Colors.indigo),
                                         label: StreamBuilder<QuerySnapshot>(
                                           builder: (context, snapshpt) {
                                             if (snapshpt.hasData) {
-                                              return Text("${snapshpt.data!.size}", style: TextStyle(color: Colors.indigo));
+                                              return Text(
+                                                  "${snapshpt.data!.size}",
+                                                  style: TextStyle(
+                                                      color: Colors.indigo));
                                             } else {
                                               return Text("");
                                             }
                                           },
                                           stream: FirebaseFirestore.instance
                                               .collection('posts')
-                                              .doc(postsSnapshots.data!.docs[index].id)
+                                              .doc(postsSnapshots
+                                                  .data!.docs[index].id)
                                               .collection('comments')
                                               .snapshots(),
                                         ),
@@ -301,32 +371,41 @@ class _PostsState extends State<Posts> {
                                   ),
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
                                       child: OutlinedButton.icon(
                                           style: ElevatedButton.styleFrom(
                                             side: BorderSide(
                                               width: 2.0,
-                                              color: postslists[index].savedFor.contains(user['id'])
+                                              color: postslists[index]
+                                                      .savedFor
+                                                      .contains(user['id'])
                                                   ? AppColors.mainColor1
                                                   : Colors.grey,
                                             ),
                                             primary: Colors.white,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
                                             ),
                                           ),
                                           onPressed: () {
-                                            List oldData = postslists[index].savedFor;
+                                            List oldData =
+                                                postslists[index].savedFor;
                                             if (oldData.contains(user['id'])) {
                                               oldData.remove(user['id']);
                                             } else {
                                               oldData.add(user['id']);
                                             }
-                                            postsSnapshots.data!.docs[index].reference.update({'savedFor': oldData});
+                                            postsSnapshots
+                                                .data!.docs[index].reference
+                                                .update({'savedFor': oldData});
                                           },
                                           icon: Icon(
                                             Icons.save_alt,
-                                            color: postslists[index].savedFor.contains(user['id'])
+                                            color: postslists[index]
+                                                    .savedFor
+                                                    .contains(user['id'])
                                                 ? AppColors.mainColor1
                                                 : Colors.grey,
                                           ),
@@ -348,7 +427,8 @@ class _PostsState extends State<Posts> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Lottie.asset("assets/lotties/error.json", repeat: false, height: Constants.screenHeight * 0.1),
+                      Lottie.asset("assets/lotties/error.json",
+                          repeat: false, height: Constants.screenHeight * 0.1),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text("Pas des publications pour le moment "),

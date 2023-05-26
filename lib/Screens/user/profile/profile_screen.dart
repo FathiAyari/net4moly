@@ -33,25 +33,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     backgroundImage: NetworkImage("${user['profile']} "),
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${user['name']} ${user['last_name']}",
-                      style: TextStyle(fontSize: Constants.screenHeight * 0.03),
-                    ),
-                    Container(
-                      child: Row(
-                        children: [
-                          Text(
-                            " ${user['email']}",
-                            style: TextStyle(fontSize: Constants.screenHeight * 0.02),
-                          ),
-                        ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${user['name']} ${user['last_name']}",
+                        style:
+                            TextStyle(fontSize: Constants.screenHeight * 0.03),
                       ),
-                    ),
-                  ],
-                ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Text(
+                              " ${user['email']}",
+                              style: TextStyle(
+                                  fontSize: Constants.screenHeight * 0.01),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
             InkWell(
@@ -61,7 +65,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(
+                      color: AppColors.mainColor1.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -92,7 +98,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(
+                      color: AppColors.mainColor1.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -123,7 +131,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(
+                      color: AppColors.mainColor1.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -154,7 +164,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(
+                      color: AppColors.mainColor1.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -185,7 +197,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(
+                      color: AppColors.mainColor1.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -239,7 +253,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(
+                      color: AppColors.mainColor1.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
