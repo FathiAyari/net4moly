@@ -62,6 +62,10 @@ class _MyPostsState extends State<MyPosts> {
                   onPressed: () async {
                     Navigator.of(context).pop();
                     FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+                    var test = await FirebaseFirestore.instance.collection('posts').doc(postId).collection('comments').get();
+                    for (var data in test.docs.toList()) {
+                      data.reference.delete();
+                    }
                   },
                 ),
               ],
