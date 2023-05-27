@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:net4moly/Model/post.dart';
 import 'package:net4moly/Screens/admin/report.dart';
 import 'package:net4moly/shared/dimensions/dimensions.dart';
 import 'package:readmore/readmore.dart';
@@ -36,7 +35,6 @@ class _ReportsState extends State<Reports> {
                         stream: FirebaseFirestore.instance.collection("posts").doc(postslists[index].postId).snapshots(),
                         builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> pstSnapshot) {
                           if (pstSnapshot.hasData) {
-                            Post post = Post.fromJson(pstSnapshot.data!.data() as Map<String, dynamic>);
                             return Padding(
                               padding: const EdgeInsets.all(8),
                               child: Container(
@@ -68,7 +66,10 @@ class _ReportsState extends State<Reports> {
                                     Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: StreamBuilder(
-                                        stream: FirebaseFirestore.instance.collection("users").doc(post.owner).snapshots(),
+                                        stream: FirebaseFirestore.instance
+                                            .collection("users")
+                                            .doc(pstSnapshot.data!.get("owner"))
+                                            .snapshots(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
                                           if (snapshot.hasData) {
@@ -95,7 +96,8 @@ class _ReportsState extends State<Reports> {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Text("${DateFormat("yyyy-MM-dd hh:mm").format(post.creationDate)}"),
+                                                          Text(
+                                                              "${DateFormat("yyyy-MM-dd hh:mm").format(pstSnapshot.data!.get("creationDate").toDate())}"),
                                                           Icon(
                                                             Icons.access_time_sharp,
                                                             size: Constants.screenHeight * 0.02,
@@ -109,57 +111,63 @@ class _ReportsState extends State<Reports> {
                                                 Spacer(),
                                                 IconButton(
                                                     onPressed: () {
-                                                      AlertDialog alert = AlertDialog(
-                                                        title: Text("Supprimer"),
-                                                        content: Text("êtes-vous sûr de vouloir supprimer cet élément?"),
-                                                        actions: [
-                                                          // Define the actions that the user can take
-                                                          TextButton(
-                                                            child: Text("Annuler"),
-                                                            onPressed: () {
-                                                              // Close the dialog
-                                                              Navigator.of(context).pop();
-                                                            },
-                                                          ),
-                                                          TextButton(
-                                                            child: Text(
-                                                              "Restaurer",
-                                                              style: TextStyle(color: Colors.green),
-                                                            ),
-                                                            onPressed: () {
-                                                              postsSnapshots.data!.docs[index].reference.delete();
-                                                              Navigator.pop(context);
-                                                            },
-                                                          ),
-                                                          TextButton(
-                                                            child: Text(
-                                                              "Supprimer",
-                                                              style: TextStyle(color: Colors.red),
-                                                            ),
-                                                            onPressed: () async {
-                                                              postsSnapshots.data!.docs[index].reference.delete();
-                                                              pstSnapshot.data!.reference.delete();
-                                                              final snackBar = SnackBar(
-                                                                content: const Text('Vous avez supprimé ce publication'),
-                                                                backgroundColor: (Colors.red),
-                                                                action: SnackBarAction(
-                                                                  label: 'fermer',
-                                                                  textColor: Colors.white,
-                                                                  onPressed: () {},
-                                                                ),
-                                                              );
-                                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                                              Navigator.of(context).pop();
-                                                            },
-                                                          ),
-                                                        ],
-                                                      );
-
                                                       // Show the dialog
                                                       showDialog(
                                                         context: context,
                                                         builder: (BuildContext context) {
-                                                          return alert;
+                                                          return AlertDialog(
+                                                            title: Text("Supprimer"),
+                                                            content: Text("êtes-vous sûr de vouloir supprimer cet élément?"),
+                                                            actions: [
+                                                              // Define the actions that the user can take
+                                                              TextButton(
+                                                                child: Text("Annuler"),
+                                                                onPressed: () {
+                                                                  // Close the dialog
+                                                                  Navigator.of(context).pop();
+                                                                },
+                                                              ),
+                                                              TextButton(
+                                                                child: Text(
+                                                                  "Restaurer",
+                                                                  style: TextStyle(color: Colors.green),
+                                                                ),
+                                                                onPressed: () {
+                                                                  postsSnapshots.data!.docs[index].reference.delete();
+                                                                  Navigator.pop(context);
+                                                                },
+                                                              ),
+                                                              TextButton(
+                                                                child: Text(
+                                                                  "Supprimer",
+                                                                  style: TextStyle(color: Colors.red),
+                                                                ),
+                                                                onPressed: () async {
+                                                                  var test = await FirebaseFirestore.instance
+                                                                      .collection('posts')
+                                                                      .doc(pstSnapshot.data!.reference.id)
+                                                                      .collection('comments')
+                                                                      .get();
+                                                                  for (var data in test.docs.toList()) {
+                                                                    data.reference.delete();
+                                                                  }
+                                                                  postsSnapshots.data!.docs[index].reference.delete();
+                                                                  pstSnapshot.data!.reference.delete();
+                                                                  Navigator.of(context).pop();
+                                                                  final snackBar = SnackBar(
+                                                                    content: const Text('Vous avez supprimé ce publication'),
+                                                                    backgroundColor: (Colors.red),
+                                                                    action: SnackBarAction(
+                                                                      label: 'fermer',
+                                                                      textColor: Colors.white,
+                                                                      onPressed: () {},
+                                                                    ),
+                                                                  );
+                                                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                                },
+                                                              ),
+                                                            ],
+                                                          );
                                                         },
                                                       );
                                                     },
@@ -185,7 +193,7 @@ class _ReportsState extends State<Reports> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     ReadMoreText(
-                                                      '${post.description}',
+                                                      '${pstSnapshot.data!.get("description")}',
                                                       trimLines: 2,
                                                       style: TextStyle(color: Colors.black),
                                                       colorClickableText: Colors.pink,
@@ -199,7 +207,7 @@ class _ReportsState extends State<Reports> {
                                             ),
                                           ],
                                         ),
-                                        if (post.image!.isNotEmpty) ...[
+                                        if (pstSnapshot.data!.get("image")!.isNotEmpty) ...[
                                           Container(
                                             width: double.infinity,
                                             child: Padding(
@@ -208,7 +216,7 @@ class _ReportsState extends State<Reports> {
                                                 child: ClipRRect(
                                                   borderRadius: BorderRadius.circular(20),
                                                   child: Image.network(
-                                                    "${post.image}",
+                                                    "${pstSnapshot.data!.get("image")}",
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
