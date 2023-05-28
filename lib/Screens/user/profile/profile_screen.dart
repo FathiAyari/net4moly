@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:net4moly/Screens/configs/constants.dart';
+import 'package:net4moly/Screens/user/cours/my_cours.dart';
 import 'package:net4moly/Screens/user/profile/change_email.dart';
 import 'package:net4moly/Screens/user/profile/change_name.dart';
 import 'package:net4moly/Screens/user/profile/change_password.dart';
@@ -39,16 +40,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Text(
                         "${user['name']} ${user['last_name']}",
-                        style:
-                            TextStyle(fontSize: Constants.screenHeight * 0.03),
+                        style: TextStyle(fontSize: Constants.screenHeight * 0.03),
                       ),
                       Container(
                         child: Row(
                           children: [
                             Text(
                               " ${user['email']}",
-                              style: TextStyle(
-                                  fontSize: Constants.screenHeight * 0.01),
+                              style: TextStyle(fontSize: Constants.screenHeight * 0.01),
                             ),
                           ],
                         ),
@@ -65,9 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.mainColor1.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -98,9 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.mainColor1.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -131,9 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.mainColor1.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -164,9 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.mainColor1.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -192,14 +183,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             InkWell(
               onTap: () {
-                // Get.to(MyPosts());
+                Get.to(MyCourses());
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.mainColor1.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [
@@ -253,9 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.mainColor1.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(5)),
+                  decoration: BoxDecoration(color: AppColors.mainColor1.withOpacity(0.5), borderRadius: BorderRadius.circular(5)),
                   height: Constants.screenHeight * 0.1,
                   child: Row(
                     children: [

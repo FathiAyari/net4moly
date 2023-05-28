@@ -5,33 +5,105 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:net4moly/Model/cours.dart';
-import 'package:net4moly/Model/user.dart';
 import 'package:net4moly/Screens/configs/constants.dart';
 import 'package:net4moly/Screens/user/cours/cours_comments.dart';
 import 'package:net4moly/Screens/user/cours/cours_details.dart';
-import 'package:net4moly/Screens/user/messages/Messenger.dart';
+import 'package:net4moly/Screens/user/cours/edit_cours.dart';
 import 'package:net4moly/shared/dimensions/dimensions.dart';
 import 'package:readmore/readmore.dart';
 
-class MySavedCours extends StatefulWidget {
-  const MySavedCours({Key? key}) : super(key: key);
+class MyCourses extends StatefulWidget {
+  const MyCourses({Key? key}) : super(key: key);
 
   @override
-  State<MySavedCours> createState() => _MySavedCoursState();
+  State<MyCourses> createState() => _MyCoursesState();
 }
 
-class _MySavedCoursState extends State<MySavedCours> {
+class _MyCoursesState extends State<MyCourses> {
   var user = GetStorage().read("user");
   ScrollController _controller = ScrollController();
+  void showMenuItems(BuildContext context, Cours cours) async {
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
+    Offset offset = renderBox.localToGlobal(Offset.zero);
+    final result = await showMenu(
+      position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
+      context: context,
+      items: [
+        PopupMenuItem(
+          onTap: () {},
+          value: 'delete',
+          child: Text('Suprrimer'),
+        ),
+        PopupMenuItem(
+          onTap: () {},
+          value: 'edit',
+          child: Text('Modifier'),
+        ),
+        PopupMenuItem(
+          onTap: () {},
+          value: 'details',
+          child: Text('Voir details'),
+        ),
+      ],
+    );
+
+    if (result != null) {
+      if (result == 'delete') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Supprimer"),
+              content: Text("êtes-vous sûr de vouloir suprimer cet élément?"),
+              actions: [
+                // Define the actions that the user can take
+                TextButton(
+                  child: Text("Annuler"),
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text("Oui"),
+                  onPressed: () async {
+                    print(cours.Tojson());
+                    Navigator.of(context).pop();
+                    FirebaseFirestore.instance.collection('cours').doc(cours.id).delete();
+                    var test = await FirebaseFirestore.instance.collection('cours').doc(cours.id).collection('comments').get();
+                    for (var data in test.docs.toList()) {
+                      data.reference.delete();
+                    }
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } else if (result == 'edit') {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditCours(
+                      cours: cours,
+                    )));
+      } else if (result == 'details') {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CoursDetails(cours: cours)));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: AppColors.mainColor1,
+        title: Text("Mes cours"),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("cours")
-            .where("savedFor", arrayContains: user['id'])
+            .where("owner", isEqualTo: user['id'])
             .orderBy("creationDate", descending: true)
             .snapshots(),
         builder: (context, postsSnapshots) {
@@ -68,19 +140,7 @@ class _MySavedCoursState extends State<MySavedCours> {
                                       (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
                                     if (snapshot.hasData) {
                                       return InkWell(
-                                        onTap: () {
-                                          if (user['id'] != snapshot.data!.get("id")) {
-                                            Get.to(Messenger(
-                                              user: AppUser(
-                                                  name: snapshot.data!.get("name"),
-                                                  id: snapshot.data!.get("id"),
-                                                  profile: snapshot.data!.get("profile"),
-                                                  last_name: snapshot.data!.get("profile"),
-                                                  email: snapshot.data!.get("email"),
-                                                  role: snapshot.data!.get("role")),
-                                            ));
-                                          }
-                                        },
+                                        onTap: () {},
                                         child: Row(
                                           children: [
                                             CircleAvatar(
@@ -114,9 +174,9 @@ class _MySavedCoursState extends State<MySavedCours> {
                                             Spacer(),
                                             IconButton(
                                                 onPressed: () {
-                                                  Get.to(CoursDetails(
-                                                    cours: postslists[index],
-                                                  ));
+                                                  Cours cours = postslists[index];
+                                                  cours.id = postsSnapshots.data!.docs[index].reference.id;
+                                                  showMenuItems(context, postslists[index]);
                                                 },
                                                 icon: Icon(Icons.more_vert))
                                           ],
@@ -132,10 +192,6 @@ class _MySavedCoursState extends State<MySavedCours> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    '${postslists[index].title}',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
                                   Row(
                                     children: [
                                       Expanded(
@@ -144,6 +200,10 @@ class _MySavedCoursState extends State<MySavedCours> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
+                                              Text(
+                                                '${postslists[index].title}',
+                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                              ),
                                               ReadMoreText(
                                                 '${postslists[index].description}',
                                                 trimLines: 2,
