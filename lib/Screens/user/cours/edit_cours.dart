@@ -268,7 +268,7 @@ class _EditCoursState extends State<EditCours> {
                                 });
                               }
                               final snackBar = SnackBar(
-                                content: const Text('Publication ajouté avec success'),
+                                content: const Text('Cours ajouté avec success'),
                                 backgroundColor: (Colors.green),
                                 action: SnackBarAction(
                                   label: 'fermer',
